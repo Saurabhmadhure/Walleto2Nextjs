@@ -1,0 +1,15 @@
+.card {
+  width: 40%;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  padding: 4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.785);
+  border-radius: 5px;
+  background-color: rgb(218, 218, 218);
+  border-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  transform: translateY(10px);
+}

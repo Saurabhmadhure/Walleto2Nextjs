@@ -1,0 +1,50 @@
+.transaction-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.transaction-item {
+  width: 300px;
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.transaction-item h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.transaction-item p {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.transaction-item p:first-child {
+  margin-top: 0;
+}
+
+.transaction-item p:last-child {
+  margin-bottom: 0;
+  font-weight: bold;
+  color: green;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td,
+th {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
