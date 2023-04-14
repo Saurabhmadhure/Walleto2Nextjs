@@ -115,7 +115,7 @@ const DashboardItem = ({ userDetails }) => {
         }
       );
       console.log(response);
-      return response.data; // Return the data from the response
+      return response.data;
     } catch (error) {
       console.error("Error fetching transaction data:", error);
     }
