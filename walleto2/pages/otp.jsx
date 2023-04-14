@@ -22,17 +22,19 @@ const OTP = ({ handleOTPVerification }) => {
   const handleActivateAccount = () => {
     setShowOtpForm(true);
   };
-  const handleOtpSubmit = (event) => {
+  const handleOtpSubmit = async (event) => {
     event.preventDefault();
     console.log(handleOTPVerification);
     var email = localStorage.getItem("email");
 
+    const otpData = {
+      email: email,
+      userEnteredOTP: otp,
+    };
     console.log(otp);
-    axios
-      .post("http://localhost:8080/users/verify", {
-        email: email,
-        userEnteredOTP: otp,
-      })
+    await axios
+      .post("/api/otp", otpData)
+
       .then((otpResponse) => {
         console.log(otpResponse);
         if (otpResponse.data === true) {

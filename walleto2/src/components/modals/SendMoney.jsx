@@ -13,7 +13,8 @@ const SendMoneyForm = ({
   const [receiverId, setReceiverId] = useState();
   const [amount, setAmount] = useState(null);
   const [warning, setWarning] = useState(false);
-  const handleSubmit = (event) => {
+
+  const handleSubmit = async (event) => {
     var accountNo = userDetails.accNo;
 
     const data = {
@@ -32,30 +33,28 @@ const SendMoneyForm = ({
     };
 
     event.preventDefault();
-    axios
-      .post("http://localhost:8080/accounts/send", data, { headers })
-      .then((response) => {
-        if (response && response.status === 200) {
-          // console.log(response);
-          // console.log(response.data.senderAvailable_balance);
-          handleDepositSuccess(response.data.senderAvailable_balance);
-          toast.error(response.data);
-          // console.log(response.data.cashback);
-          toast.success("Cashback Earned of " + response.data.cashback);
-          var cashb = response.data.cashback;
-          setOpenModal(false);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error.response.data === "") {
-          toast.error("No Account Available");
-        } else {
-          console.log(error.response.data);
+    try {
+      const response = await axios.post("/api/send", data, { headers });
+      if (response && response.status === 200) {
+        // console.log(response);
+        // console.log(response.data.senderAvailable_balance);
+        handleDepositSuccess(response.data.senderAvailable_balance);
+        toast.error(response.data);
+        // console.log(response.data.cashback);
+        toast.success("Cashback Earned of " + response.data.cashback);
+        var cashb = response.data.cashback;
+        setOpenModal(false);
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response.data === "") {
+        toast.error("No Account Available");
+      } else {
+        console.log(error.response.data);
 
-          toast.error(error.response.data);
-        }
-      });
+        toast.error(error.response.data);
+      }
+    }
   };
   const availableBalance = localStorage.getItem("balance");
 

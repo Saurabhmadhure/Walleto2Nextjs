@@ -48,10 +48,9 @@ const DepositForm = ({ userDetails, handleDepositSuccess }) => {
     };
 
     if (data.amount > 0) {
-      axios
-        .post("http://localhost:8080/accounts/deposit", requestData, {
-          headers,
-        })
+      await axios
+        .post("/api/deposit", requestData, { headers })
+
         .then((response) => {
           console.log(response);
           handleDepositSuccess(response.data.available_Balance);

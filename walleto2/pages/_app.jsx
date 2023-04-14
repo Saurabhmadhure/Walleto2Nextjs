@@ -2,7 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function MyApp({ Component, pageProps }) {
-  console.log(pageProps);
+  // console.log(pageProps);
   return <Component {...pageProps} />;
 }
 

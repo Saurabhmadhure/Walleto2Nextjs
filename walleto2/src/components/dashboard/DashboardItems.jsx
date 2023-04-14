@@ -21,7 +21,6 @@ const DashboardItem = ({ userDetails }) => {
   const handleClose = () => {
     setModalOpen(false);
   };
-  const router = useRouter();
 
   const toggleShowBalance = () => {
     setShowBalance(!showBalance);
@@ -54,7 +53,6 @@ const DashboardItem = ({ userDetails }) => {
 
   useEffect(() => {
     const fetchCashback = async () => {
-      // console.log(userDetails);
       try {
         const response = await axios.get(
           `http://localhost:8080/accounts/cashback/${acNo}`,
@@ -71,67 +69,56 @@ const DashboardItem = ({ userDetails }) => {
 
     fetchCashback();
   }, [acNo]);
+  //  useEffect(() => {
+  //    const fetchCashback = async () => {
+  //      const fetchCashback = async () => {
+  //        try {
+  //          const response = await axios.get("/api/cashback", {
+  //            params: { acNo },
+  //            headers,
+  //          });
 
-  // var listOfTransactions = () => {
-  //   fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //     .then((response) => response.json())
-  //     .then((data) => setTransactions(data))
-  //     .catch((error) => console.log(error));
+  //          setCashback(response.data.total_Cashback_Earned);
+  //        } catch (error) {
+  //          // console.error(error);
+  //        }
+  //      };
+  //    };
+
+  //    fetchCashback();
+  //  }, [acNo]);
+
+  const router = useRouter();
+
+  // const navigateToTransactions = () => {
+  //   const response = fetchTransactionData();
+  //   console.log(response);
+  //   router.push("/transactions", response);
   // };
-  // console.log(transaction);
-  // var listOfTransactions = () => {
-  //   fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setTransactions(data);
-  //       console.log(data);
-  //       console.log(transaction);
-  //       document.getElementById("myTagId").innerText = JSON.stringify(data);
-  //     })
-  //     .catch((error) => console.log(error));
-
-  // useEffect(() => {
-  //   fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //     .then((response) => response.json())
-  //     .then((data) => setTransactions(data))
-  //     .catch((error) => console.log(error));
-  // }, [acNo, headers]);
-  // console.log(transaction);
-  // };
-
-  // document.addEventListener("DOMContentLoaded", () => {
-  //   var listOfTransactions = () => {
-  //     fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setTransactions(data);
-  //         console.log(data);
-  //         console.log(transaction);
-  //         document.getElementById("myTagId").innerText = JSON.stringify(data);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   };
-
-  //   listOfTransactions();
-  // });
-  const listOfTransactions = () => {
-    fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-      .then((response) => response.json())
-      .then((data) => {
-        const transactionData = data;
-        console.log(transactionData);
-        // navigateToTransactions(transactionData);
-
-        // setTransactions(transactions);
-        // Do whatever you want with the transactions variable here
-      })
-      .catch((error) => console.log(error));
+  const navigateToTransactions = async () => {
+    try {
+      const response = await fetchTransactionData();
+      router.push({
+        pathname: "/transactions",
+        query: { response: JSON.stringify(response) },
+      });
+    } catch (error) {
+      console.error("Error navigating to transactions:", error);
+    }
   };
-
-  listOfTransactions();
-
-  const navigateToTransactions = (transactionData) => {
-    router.push("/transactions", transactionData);
+  const fetchTransactionData = async (accNo) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/accounts/transaction/${acNo}`,
+        {
+          headers,
+        }
+      );
+      console.log(response);
+      return response.data; // Return the data from the response
+    } catch (error) {
+      console.error("Error fetching transaction data:", error);
+    }
   };
 
   const balAvailable = async () => {
@@ -156,7 +143,6 @@ const DashboardItem = ({ userDetails }) => {
   const handleBalanceClick = async () => {
     setShowBalance((showBalance) => !showBalance);
 
-    // setShowBalance(!showBalance);
     if (!balanceAvailable) {
       try {
         const response = await axios.get(

@@ -80,85 +80,80 @@ const SignUpModel = ({
         return;
       }
 
-      axios
-        .post("http://localhost:8080/users/register", user)
-        .then((response) => {
-          const responseData = response.data;
-          if (responseData && responseData.balance === 0) {
-            // doLogin(responseData, () => {});
-            // console.log(responseData);
-            localStorage.setItem("tokens", responseData.token);
-            localStorage.setItem("accounts", responseData?.accNo);
-            localStorage.setItem("email", responseData.email);
-            localStorage.setItem("name", responseData.name);
-            localStorage.setItem("response", responseData);
-            setUserInfo(responseData);
-            setEmail(responseData.email);
+      axios;
+      const response = await axios.post("/api/register", user);
 
-            setUser({
-              name: "",
-              email: "",
-              password: "",
-            });
-            toast.success("Otp has been Sent To your Registered Email");
+      const responseData = response.data;
+      if (responseData && responseData.balance === 0) {
+        // doLogin(responseData, () => {});
+        // console.log(responseData);
+        localStorage.setItem("tokens", responseData.token);
+        localStorage.setItem("accounts", responseData?.accNo);
+        localStorage.setItem("email", responseData.email);
+        localStorage.setItem("name", responseData.name);
+        setUserInfo(responseData);
+        setEmail(responseData.email);
 
-            setShowOTPModal(true);
-
-            console.log(email);
-          } else {
-            if (error && error.status === 400) {
-              toast.error("Something went wrong, please try again later");
-            } else {
-              toast.error(
-                "This Email Id is Already Present Please Try Another One"
-              );
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+        setUser({
+          name: "",
+          email: "",
+          password: "",
         });
+        toast.success("Otp has been Sent To your Registered Email");
+
+        setShowOTPModal(true);
+
+        console.log(email);
+      } else {
+        if (error && error.status === 400) {
+          toast.error("Something went wrong, please try again later");
+        } else {
+          toast.error(
+            "This Email Id is Already Present Please Try Another One"
+          );
+        }
+      }
     } catch (error) {
       console.log(error);
     }
+
     // navigate("/home/otp");
   };
 
-  const handleOtpSubmit = (event) => {
+  const handleOtpSubmit = async (event) => {
     event.preventDefault();
     var email = localStorage.getItem("email");
 
-    console.log(otp);
-    axios
-      .post("http://localhost:8080/users/verify", {
-        email: email,
+    const otpData = {
+      email: email,
+      userEnteredOTP: otp,
+    };
+    //OTP api Route
+    const otpResponse = await axios.post("/api/otp", otpData);
+
+    // console.log(otpResponse);
+    if (otpResponse.data === true) {
+      console.log();
+      toast.success("Succesfully Registered");
+      localStorage.setItem("otpVerification", true);
+      handleOTPVerification(true);
+      setOtp("");
+
+      handleUserInfo(userInfo);
+      setShowOTPModal(false);
+      onHide();
+    } else {
+      localStorage.setItem("otpVerification", false);
+      handleOTPVerification(false);
+
+      console.log({
         userEnteredOTP: otp,
-      })
-      .then((otpResponse) => {
-        // console.log(otpResponse);
-        if (otpResponse.data === true) {
-          console.log();
-          toast.success("Succesfully Registered");
-          localStorage.setItem("otpVerification", true);
-          handleOTPVerification(true);
-          setOtp("");
-
-          handleUserInfo(userInfo);
-          setShowOTPModal(false);
-          onHide();
-        } else {
-          localStorage.setItem("otpVerification", false);
-          handleOTPVerification(false);
-
-          console.log({
-            userEnteredOTP: otp,
-            email: email,
-          });
-          setOtp("");
-
-          toast.error("Invalid Otp. Please try again");
-        }
+        email: email,
       });
+      setOtp("");
+
+      toast.error("Invalid Otp. Please try again");
+    }
   };
   const errorHandler = () => {
     setError(null);
