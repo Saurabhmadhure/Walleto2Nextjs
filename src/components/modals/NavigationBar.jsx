@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
+// import Navbar from "react-bootstrap/Navbar";
 import Navbar from "react-bootstrap/Navbar";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import SignUpModel from "./SignUpModel.jsx";
-import LoginModal from "./LoginModal.jsx";
+import LoginModal from "./LoginModal";
+import SignUpModel from "./SignUpModel";
 
-const NavigationBar = ({ handleUserInfo, userDetails }) => {
+function NavigationBar({ handleUserInfo, userDetails }) {
   const [uname, setUname] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [signModalShow, setSignModalShow] = useState(false);
@@ -112,5 +112,5 @@ const NavigationBar = ({ handleUserInfo, userDetails }) => {
       </div>
     </nav>
   );
-};
+}
 export default NavigationBar;

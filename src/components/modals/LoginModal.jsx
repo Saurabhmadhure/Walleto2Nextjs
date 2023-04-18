@@ -7,13 +7,13 @@ import { Modal } from "react-bootstrap";
 import Card from "../card/Card";
 import axios from "axios";
 
-const LoginModal = ({
+function LoginModal({
   handleOTPVerification,
   isOTPVerified,
   handleUserInfo,
   onHide,
   ...props
-}) => {
+}) {
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
@@ -28,7 +28,7 @@ const LoginModal = ({
     setData({ ...data, [field]: event.target.value });
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     if (data.email.trim().length === 0) {
       toast.error("Email is Empty");
@@ -38,38 +38,41 @@ const LoginModal = ({
       toast.error("Password is Empty");
       return;
     }
-    axios
-      .post("http://localhost:8080/users/login", data)
-      .then((response) => {
-        const responseData = response.data;
-        handleUserInfo(responseData);
-        localStorage.setItem("tokens", responseData?.token);
-        localStorage.setItem("userName", responseData.name);
-        localStorage.setItem("tokens", responseData.token);
-        localStorage.setItem("accounts", responseData?.accNo);
-        localStorage.setItem("email", responseData.email);
-        localStorage.setItem("name", responseData.name);
-        localStorage.setItem("userData", JSON.stringify(responseData));
-        toast.success("Succesfully Logged in");
-        localStorage.setItem("accounts", responseData?.accNo);
+    // axios
+    //   // .post("http://localhost:8080/users/login", data)
+    //   .then((response) =>
+    try {
+      //api route for Login
+      const response = await axios.post("/api/login", data);
+
+      const responseData = response.data;
+      handleUserInfo(responseData);
+      localStorage.setItem("tokens", responseData?.token);
+      localStorage.setItem("userName", responseData.name);
+      localStorage.setItem("tokens", responseData.token);
+      localStorage.setItem("accounts", responseData?.accNo);
+      localStorage.setItem("email", responseData.email);
+      localStorage.setItem("name", responseData.name);
+      // localStorage.setItem("userData", JSON.stringify(responseData));
+      toast.success("Succesfully Logged in");
+      localStorage.setItem("accounts", responseData?.accNo);
+      setData({ email: "", password: "" });
+      handleModalClose();
+      const tempOtpVerifiedFlag = localStorage.getItem("otpVerification");
+      if (isOTPVerified === "true" || Boolean(tempOtpVerifiedFlag)) {
+        router.push("/home");
+      } else {
+        router.push("/otp");
+      }
+    } catch (error) {
+      if (error.response.status === 403 || error.response.status === 400) {
+        toast.error("Insert a Valid Email and Password");
         setData({ email: "", password: "" });
-        handleModalClose();
-        const tempOtpVerifiedFlag = localStorage.getItem("otpVerification");
-        if (isOTPVerified === "true" || Boolean(tempOtpVerifiedFlag)) {
-          router.push("/home");
-        } else {
-          router.push("/otp");
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 403 || error.response.status === 400) {
-          toast.error("Insert a Valid Email and Password");
-          setData({ email: "", password: "" });
-        } else {
-          toast.error("Something Went Wrong !!");
-          setData({ email: "", password: "" });
-        }
-      });
+      } else {
+        toast.error("Something Went Wrong !!");
+        setData({ email: "", password: "" });
+      }
+    }
   };
 
   const handleModalClose = () => {
@@ -146,5 +149,5 @@ const LoginModal = ({
       </Modal.Footer>
     </Modal>
   );
-};
+}
 export default LoginModal;

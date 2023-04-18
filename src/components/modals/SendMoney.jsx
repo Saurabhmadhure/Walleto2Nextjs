@@ -4,45 +4,47 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Form } from "react-bootstrap";
 
-const SendMoneyForm = ({
+function SendMoneyForm({
   userDetails,
   setOpenModal,
   onConfirm,
   handleDepositSuccess,
-}) => {
+}) {
   const [receiverId, setReceiverId] = useState();
   const [amount, setAmount] = useState(null);
   const [warning, setWarning] = useState(false);
-  const handleSubmit = (event) => {
-    var accountNo = userDetails.accNo;
 
+  const handleSubmit = async (event) => {
+    var accountNo = userDetails.accNo;
+    const jwtToken = userDetails.token;
+
+    // const data = {
+    //   senderId: accountNo,
+    //   receiverId: receiverId,
+    //   sendAmount: amount,
+    // };
     const data = {
       senderId: accountNo,
       receiverId: receiverId,
       sendAmount: amount,
+      jwtToken: jwtToken,
     };
-
-    const jwtToken = userDetails.token;
 
     // console.log(jwtToken);
 
-    const headers = {
-      Authorization: `Bearer ${jwtToken}`,
-      "Content-Type": "application/json",
-    };
+    // const headers = {
+    //   Authorization: `Bearer ${jwtToken}`,
+    //   "Content-Type": "application/json",
+    // };
 
     event.preventDefault();
     axios
-      .post("http://localhost:8080/accounts/send", data, { headers })
+      .post("/api/send", data)
       .then((response) => {
         if (response && response.status === 200) {
-          // console.log(response);
-          // console.log(response.data.senderAvailable_balance);
           handleDepositSuccess(response.data.senderAvailable_balance);
           toast.error(response.data);
-          // console.log(response.data.cashback);
-          toast.success("Cashback Earned of " + response.data.cashback);
-          var cashb = response.data.cashback;
+          toast.success("Cashback Earned of" + response.data.cashback);
           setOpenModal(false);
         }
       })
@@ -136,6 +138,6 @@ const SendMoneyForm = ({
       </Form>
     </>
   );
-};
+}
 
 export default SendMoneyForm;

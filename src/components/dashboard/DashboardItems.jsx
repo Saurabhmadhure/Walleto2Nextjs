@@ -18,14 +18,7 @@ const DashboardItem = ({ userDetails }) => {
   const [transaction, setTransactions] = useState([]);
 
   const [cashback, setCashback] = useState(null);
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-  const router = useRouter();
 
-  const toggleShowBalance = () => {
-    setShowBalance(!showBalance);
-  };
   const errorHandler = () => {
     setModalOpen(false);
   };
@@ -33,13 +26,6 @@ const DashboardItem = ({ userDetails }) => {
     setShowDepositContainer(!showDepositContainer);
   };
 
-  const toggleModal = () => {
-    setModalOpen(!modalOpen);
-  };
-
-  const handleCashback = (value) => {
-    setCashback(value);
-  };
   const acNo = userDetails?.accNo;
   const jwtToken = userDetails?.token;
 
@@ -54,92 +40,50 @@ const DashboardItem = ({ userDetails }) => {
 
   useEffect(() => {
     const fetchCashback = async () => {
-      // console.log(userDetails);
       try {
         const response = await axios.get(
-          `http://localhost:8080/accounts/cashback/${acNo}`,
-          { headers }
+          `/api/cashback?acNo=${acNo}&jwtToken=${jwtToken}`
         );
-        // console.log(response);
-        // console.log(response.data.total_Cashback_Earned);
 
         setCashback(response.data.total_Cashback_Earned);
-      } catch (error) {
-        // console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchCashback();
   }, [acNo]);
 
-  // var listOfTransactions = () => {
-  //   fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //     .then((response) => response.json())
-  //     .then((data) => setTransactions(data))
-  //     .catch((error) => console.log(error));
-  // };
-  // console.log(transaction);
-  // var listOfTransactions = () => {
-  //   fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setTransactions(data);
-  //       console.log(data);
-  //       console.log(transaction);
-  //       document.getElementById("myTagId").innerText = JSON.stringify(data);
-  //     })
-  //     .catch((error) => console.log(error));
+  const router = useRouter();
 
-  // useEffect(() => {
-  //   fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //     .then((response) => response.json())
-  //     .then((data) => setTransactions(data))
-  //     .catch((error) => console.log(error));
-  // }, [acNo, headers]);
-  // console.log(transaction);
-  // };
-
-  // document.addEventListener("DOMContentLoaded", () => {
-  //   var listOfTransactions = () => {
-  //     fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setTransactions(data);
-  //         console.log(data);
-  //         console.log(transaction);
-  //         document.getElementById("myTagId").innerText = JSON.stringify(data);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   };
-
-  //   listOfTransactions();
-  // });
-  const listOfTransactions = () => {
-    fetch(`http://localhost:8080/accounts/transaction/${acNo}`, { headers })
-      .then((response) => response.json())
-      .then((data) => {
-        const transactionData = data;
-        console.log(transactionData);
-        // navigateToTransactions(transactionData);
-
-        // setTransactions(transactions);
-        // Do whatever you want with the transactions variable here
-      })
-      .catch((error) => console.log(error));
+  const navigateToTransactions = async () => {
+    try {
+      const response = await fetchTransactionData();
+      router.push({
+        pathname: "/transactions",
+        query: { response: JSON.stringify(response) },
+      });
+    } catch (error) {
+      console.error("Error navigating to transactions:", error);
+    }
   };
 
-  listOfTransactions();
-
-  const navigateToTransactions = (transactionData) => {
-    router.push("/transactions", transactionData);
+  const fetchTransactionData = async () => {
+    try {
+      const apiResponse = await axios.get(
+        `/api/alltransactions?acNo=${acNo}&jwtToken=${jwtToken}`
+      );
+    } catch (error) {
+      console.error("Error fetching transaction data:", error);
+    }
   };
+  useEffect(() => {
+    fetchTransactionData();
+  }, []);
 
   const balAvailable = async () => {
-    console.log(acNo);
+    setShowBalance((showBalance) => !showBalance);
     try {
       const response = await axios.get(
-        `http://localhost:8080/accounts/${acNo}`,
-        { headers }
+        `/api/balance?acNo=${acNo}&jwtToken=${jwtToken}`
       );
       setBalance(response.data.availableBalance);
       setShowDepositContainer(false);
@@ -153,24 +97,6 @@ const DashboardItem = ({ userDetails }) => {
       balAvailable();
     }
   }, [userDetails]);
-  const handleBalanceClick = async () => {
-    setShowBalance((showBalance) => !showBalance);
-
-    // setShowBalance(!showBalance);
-    if (!balanceAvailable) {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/accounts/${acNo}`,
-          {
-            headers,
-          }
-        );
-        setBalanceAvailable(true);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <>
@@ -186,7 +112,7 @@ const DashboardItem = ({ userDetails }) => {
               </h2>
             </div>
             <div className="col-lg-4 col-md-4 col-12  justify-content-center ">
-              <Button variant="secondary" onClick={handleBalanceClick}>
+              <Button variant="secondary" onClick={balAvailable}>
                 {showBalance ? "Hide Balance" : "Show Balance"}
               </Button>
               {showBalance && <h2>₹{balance}</h2>}
@@ -260,20 +186,5 @@ const DashboardItem = ({ userDetails }) => {
     </>
   );
 };
-// export async function getServerSideProps(context) {
-//   const accountNo = localStorage.getItem("accounts");
-//   console.log("Account Number " + accountNo);
-
-//   let data = await fetch(
-//     `http://localhost:8080/accounts/transaction/${accountNo}`,
-//     { headers }
-//   );
-//   console.log(data);
-//   let allTransactions = await data.json();
-//   console.log(allTransactions);
-//   return {
-//     props: { allTransactions }, // will be passed to the page component as props
-//   };
-// }
 
 export default DashboardItem;
