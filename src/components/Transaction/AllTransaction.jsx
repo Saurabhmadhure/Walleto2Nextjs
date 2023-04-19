@@ -5,6 +5,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
+import { Button } from "react-bootstrap";
 
 function AllTransaction({ response }) {
   const [transactions, setTransactions] = useState(response ?? []);
@@ -58,7 +59,7 @@ function AllTransaction({ response }) {
       field: "transaction",
       filter: "agNumberColumnFilter",
       filterParams: {
-        filterOptions: ["equals"],
+        filterOptions: ["equals", "lessThan", "greaterThan"],
       },
 
       cellStyle: (params) => {
@@ -183,19 +184,21 @@ function AllTransaction({ response }) {
               justifyContent: "flex-end",
               margin: "1rem 0",
             }}>
-            <button
+            <Button
+              className="btn btn-secondary"
               style={{ marginRight: "1rem" }}
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}>
               &lt; Prev
-            </button>
-            <button
+            </Button>
+            <Button
+              className="btn btn-secondary"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}>
               Next &gt;
-            </button>
+            </Button>
           </div>
-          <button onClick={() => handleDownload("csv")}>Download as CSV</button>
+          <Button onClick={() => handleDownload("csv")}>Download File</Button>
         </div>
       </div>
     </Card>

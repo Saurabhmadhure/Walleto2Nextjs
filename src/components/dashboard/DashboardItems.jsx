@@ -15,7 +15,6 @@ const DashboardItem = ({ userDetails }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [balanceAvailable, setBalanceAvailable] = useState(null);
   const [balance, setBalance] = useState(null);
-  const [transaction, setTransactions] = useState([]);
 
   const [cashback, setCashback] = useState(null);
 
@@ -103,7 +102,7 @@ const DashboardItem = ({ userDetails }) => {
       <Card>
         <Container>
           <div className="row">
-            <div className="col-lg-4 col-md-1 col-12 flex-lg-fill ">
+            <div className="col-lg-4 col-md-4 col-sm-12 flex-lg-fill">
               <br />
 
               <h5>Account Number</h5>
