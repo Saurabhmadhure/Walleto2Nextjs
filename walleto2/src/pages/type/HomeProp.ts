@@ -22,3 +22,7 @@ export type DepositFormProps = {
   userDetails: any;
   handleDepositSuccess: (balance: number) => void;
 };
+export type LoginParam = {
+  email: string;
+  password: string;
+};

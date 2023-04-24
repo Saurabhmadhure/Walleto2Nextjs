@@ -13,7 +13,9 @@ function DepositForm({ userDetails, handleDepositSuccess }: DepositFormProps) {
     amount: "",
   });
   // const [isSubmitting, setIsSubmitting] = useState(false);
-  const [balance, setBalance] = useState(userDetails?.balance || 0);
+  const [balance, setBalance] = useState<number | null>(
+    userDetails?.balance || 0
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

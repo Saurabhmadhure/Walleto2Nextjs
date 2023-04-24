@@ -8,14 +8,15 @@ import { Modal } from "react-bootstrap";
 import Card from "../card/Card";
 import axios from "axios";
 import { LoginModalProps } from "../../pages/type/NavbarProp";
+import { LoginParam, UserDetails } from "../../pages/type/HomeProp";
 
 function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
   const router = useRouter();
-  const [data, setData] = useState({
+  const [data, setData] = useState<LoginParam>({
     email: "",
     password: "",
   });
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState<Boolean>(false);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -36,6 +37,7 @@ function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
       const response = await axios.post("/api/login", data);
 
       const responseData = response.data;
+      // LoginModalProps.handleUserInfo(responseData);
       handleUserInfo(responseData);
       localStorage.setItem("tokens", responseData?.token);
       localStorage.setItem("userName", responseData.name);
