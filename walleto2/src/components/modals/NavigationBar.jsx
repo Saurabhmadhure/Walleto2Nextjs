@@ -5,8 +5,8 @@ import Navbar from "react-bootstrap/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import LoginModal from "./LoginModal";
 import SignUpModel from "./SignUpModel";
+import LoginModal from "./LoginModal";
 
 function NavigationBar({ handleUserInfo, userDetails }) {
   const [uname, setUname] = useState("");

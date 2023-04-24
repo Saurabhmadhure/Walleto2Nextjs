@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
@@ -6,8 +7,9 @@ import Button from "react-bootstrap/Button";
 import { Modal } from "react-bootstrap";
 import Card from "../card/Card";
 import axios from "axios";
+import { LoginModalProps } from "../../pages/type/NavbarProp";
 
-function LoginModal({ handleUserInfo, onHide, ...props }) {
+function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
@@ -15,16 +17,16 @@ function LoginModal({ handleUserInfo, onHide, ...props }) {
   });
   const [modalShow, setModalShow] = useState(false);
 
-  const handleChange = (event, field) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
     setData({ ...data, [field]: event.target.value });
   };
 
-  const handleFormSubmit = async (event) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (data.email.trim().length === 0) {
-      toast.error("Email is Empty");
-      return;
-    }
+
     if (data.password.trim().length === 0) {
       toast.error("Password is Empty");
       return;
@@ -41,11 +43,11 @@ function LoginModal({ handleUserInfo, onHide, ...props }) {
       localStorage.setItem("accounts", responseData?.accNo);
       localStorage.setItem("email", responseData.email);
       localStorage.setItem("name", responseData.name);
-      toast.success("Succesfully Logged in");
+      toast.success("Successfully Logged in");
       localStorage.setItem("accounts", responseData?.accNo);
       setData({ email: "", password: "" });
       handleModalClose();
-      onHide;
+      onHide();
       const tempOtpVerifiedFlag = localStorage.getItem("otpVerification");
       if (tempOtpVerifiedFlag === "true") {
         router.push("/home");
@@ -78,10 +80,10 @@ function LoginModal({ handleUserInfo, onHide, ...props }) {
       </Modal.Header>
       <Modal.Body>
         <Card>
-          <h1 align="center">Login Here</h1>
+          <h1 className="text-center">Login Here</h1>
           <br />
 
-          <Form bg="dark" variant="dark" onSubmit={handleFormSubmit}>
+          <Form style={{ backgroundColor: "dark" }} onSubmit={handleFormSubmit}>
             <Form.Group className="mb-1">
               <Form.Label>
                 <h5>Email address</h5>
@@ -90,7 +92,9 @@ function LoginModal({ handleUserInfo, onHide, ...props }) {
                 type="email"
                 placeholder="Enter email"
                 value={data.email}
-                onChange={(e) => handleChange(e, "email")}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "email")
+                }
               />
             </Form.Group>
             <Form.Group className="mb-1">
@@ -100,7 +104,9 @@ function LoginModal({ handleUserInfo, onHide, ...props }) {
               <Form.Control
                 type="password"
                 placeholder="Password"
-                onChange={(e) => handleChange(e, "password")}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleChange(e, "password")
+                }
                 value={data.password}
               />
             </Form.Group>
