@@ -5,10 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "react-bootstrap/Button";
 import { Form } from "react-bootstrap";
 
-function simulateNetworkRequest() {
-  return new Promise((resolve) => setTimeout(resolve, 2000));
-}
-
 const DepositForm = ({ userDetails, handleDepositSuccess }) => {
   const [data, setData] = useState({
     uid: "",
@@ -76,14 +72,6 @@ const DepositForm = ({ userDetails, handleDepositSuccess }) => {
     // setIsSubmitting(false);
   };
   const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (isLoading) {
-      simulateNetworkRequest().then(() => {
-        setLoading(false);
-      });
-    }
-  }, [isLoading]);
 
   const handleClick = () => setLoading(true);
 

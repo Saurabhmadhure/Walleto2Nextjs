@@ -2,12 +2,16 @@ import axios from "axios";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    const { acNo } = req.query;
-    const headers = {};
+    const { acNo, jwtToken } = req.query;
+
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+      "Content-Type": "application/json",
+    };
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/accounts/cashback/${acNo}`,
+        `http://localhost:8080/accounts/${acNo}`,
         { headers }
       );
 

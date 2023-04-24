@@ -8,12 +8,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ErrorModal from "../errormodal/ErrorModal";
 
-const SignUpModel = ({
+function SignUpModel({
   handleUserInfo,
   handleOTPVerification,
   onHide,
   ...props
-}) => {
+}) {
   const [otp, setOtp] = useState("");
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
@@ -277,5 +277,5 @@ const SignUpModel = ({
       />
     </Modal>
   );
-};
+}
 export default SignUpModel;

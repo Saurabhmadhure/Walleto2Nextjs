@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import NavigationBar from "./modals/NavigationBar.jsx";
+import NavigationBar from "./NavigationBar";
 // import styles from "../styles/AfterLoginNavigationBar.module.css";
 
-const Base = ({ handleUserInfo, userDetails }) => {
+function Base({ handleUserInfo, userDetails }) {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const handleLoggedInStatus = (status) => {
@@ -18,6 +18,6 @@ const Base = ({ handleUserInfo, userDetails }) => {
       />
     </>
   );
-};
+}
 
 export default Base;

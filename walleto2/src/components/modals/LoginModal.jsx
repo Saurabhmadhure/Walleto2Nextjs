@@ -7,13 +7,13 @@ import { Modal } from "react-bootstrap";
 import Card from "../card/Card";
 import axios from "axios";
 
-const LoginModal = ({
+function LoginModal({
   handleOTPVerification,
   isOTPVerified,
   handleUserInfo,
   onHide,
   ...props
-}) => {
+}) {
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
@@ -149,5 +149,5 @@ const LoginModal = ({
       </Modal.Footer>
     </Modal>
   );
-};
+}
 export default LoginModal;

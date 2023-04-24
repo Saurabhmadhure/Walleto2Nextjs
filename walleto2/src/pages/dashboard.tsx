@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "../src/styles/Dashboard.module.css";
-import DashboardItem from "../src/components/dashboard/DashboardItems";
+import styles from "../styles/Dashboard.module.css";
+import DashboardItem from "../components/dashboard/DashboardItems";
+import { Props } from "./type/UserDetails";
 
-const UserDashboard = ({ userDetails }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+const UserDashboard: React.FC<Props> = ({ userDetails }) => {
+  const [loggedIn, setLoggedIn] = useState<Boolean>(false);
 
   useEffect(() => {
     if (userDetails !== null && userDetails !== undefined) {
@@ -28,7 +29,7 @@ const UserDashboard = ({ userDetails }) => {
                     </div>
                   </div>
                   <hr />
-                  <DashboardItem userDetails={userDetails} />
+                  {userDetails && <DashboardItem userDetails={userDetails} />}
                 </>
               ) : (
                 <div className={`card text-center ${styles.accountcard}`}>
@@ -46,16 +47,5 @@ const UserDashboard = ({ userDetails }) => {
     </div>
   );
 };
-
-// export async function getServerSideProps(context) {
-//   const userDetails = await fetch("https://api.example.com/userDetails");
-//   const userDetailsJson = await userDetails.json();
-
-//   return {
-//     props: {
-//       userDetails: userDetailsJson,
-//     },
-//   };
-// }
 
 export default UserDashboard;

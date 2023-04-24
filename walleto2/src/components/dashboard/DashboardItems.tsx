@@ -6,25 +6,22 @@ import SendMoneyForm from "../modals/SendMoney";
 import Modal from "../modals/Modal";
 import axios from "axios";
 import DepositForm from "./DepositForm.jsx";
+import { Props } from "../../pages/type/HomeProp";
 
 const { useEffect, useState } = React;
 
-const DashboardItem = ({ userDetails }) => {
-  const [showBalance, setShowBalance] = useState(false);
-  const [showDepositContainer, setShowDepositContainer] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [balanceAvailable, setBalanceAvailable] = useState(null);
-  const [balance, setBalance] = useState(null);
-  const [transaction, setTransactions] = useState([]);
+function DashboardItem({ userDetails }: Props) {
+  const [showBalance, setShowBalance] = useState<boolean>(false);
+  const [showDepositContainer, setShowDepositContainer] =
+    useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [balanceAvailable, setBalanceAvailable] = useState<boolean | null>(
+    null
+  );
+  const [balance, setBalance] = useState<number | null>(null);
 
-  const [cashback, setCashback] = useState(null);
-  const handleClose = () => {
-    setModalOpen(false);
-  };
+  const [cashback, setCashback] = useState<number | null>(null);
 
-  const toggleShowBalance = () => {
-    setShowBalance(!showBalance);
-  };
   const errorHandler = () => {
     setModalOpen(false);
   };
@@ -32,13 +29,6 @@ const DashboardItem = ({ userDetails }) => {
     setShowDepositContainer(!showDepositContainer);
   };
 
-  const toggleModal = () => {
-    setModalOpen(!modalOpen);
-  };
-
-  const handleCashback = (value) => {
-    setCashback(value);
-  };
   const acNo = userDetails?.accNo;
   const jwtToken = userDetails?.token;
 
@@ -46,7 +36,7 @@ const DashboardItem = ({ userDetails }) => {
     Authorization: `Bearer ${jwtToken}`,
     "Content-Type": "application/json",
   };
-  const handleDepositSuccess = (data) => {
+  const handleDepositSuccess = (data: number | null) => {
     setBalance(data);
     setShowDepositContainer(false);
   };
@@ -55,46 +45,18 @@ const DashboardItem = ({ userDetails }) => {
     const fetchCashback = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/accounts/cashback/${acNo}`,
-          { headers }
+          `/api/cashback?acNo=${acNo}&jwtToken=${jwtToken}`
         );
-        // console.log(response);
-        // console.log(response.data.total_Cashback_Earned);
 
         setCashback(response.data.total_Cashback_Earned);
-      } catch (error) {
-        // console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchCashback();
   }, [acNo]);
-  //  useEffect(() => {
-  //    const fetchCashback = async () => {
-  //      const fetchCashback = async () => {
-  //        try {
-  //          const response = await axios.get("/api/cashback", {
-  //            params: { acNo },
-  //            headers,
-  //          });
-
-  //          setCashback(response.data.total_Cashback_Earned);
-  //        } catch (error) {
-  //          // console.error(error);
-  //        }
-  //      };
-  //    };
-
-  //    fetchCashback();
-  //  }, [acNo]);
 
   const router = useRouter();
 
-  // const navigateToTransactions = () => {
-  //   const response = fetchTransactionData();
-  //   console.log(response);
-  //   router.push("/transactions", response);
-  // };
   const navigateToTransactions = async () => {
     try {
       const response = await fetchTransactionData();
@@ -106,27 +68,25 @@ const DashboardItem = ({ userDetails }) => {
       console.error("Error navigating to transactions:", error);
     }
   };
-  const fetchTransactionData = async (accNo) => {
+
+  const fetchTransactionData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/accounts/transaction/${acNo}`,
-        {
-          headers,
-        }
+      const apiResponse = await axios.get(
+        `/api/alltransactions?acNo=${acNo}&jwtToken=${jwtToken}`
       );
-      console.log(response);
-      return response.data;
     } catch (error) {
       console.error("Error fetching transaction data:", error);
     }
   };
+  useEffect(() => {
+    fetchTransactionData();
+  }, []);
 
   const balAvailable = async () => {
-    console.log(acNo);
+    setShowBalance((showBalance) => !showBalance);
     try {
       const response = await axios.get(
-        `http://localhost:8080/accounts/${acNo}`,
-        { headers }
+        `/api/balance?acNo=${acNo}&jwtToken=${jwtToken}`
       );
       setBalance(response.data.availableBalance);
       setShowDepositContainer(false);
@@ -140,30 +100,13 @@ const DashboardItem = ({ userDetails }) => {
       balAvailable();
     }
   }, [userDetails]);
-  const handleBalanceClick = async () => {
-    setShowBalance((showBalance) => !showBalance);
-
-    if (!balanceAvailable) {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/accounts/${acNo}`,
-          {
-            headers,
-          }
-        );
-        setBalanceAvailable(true);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <>
       <Card>
         <Container>
           <div className="row">
-            <div className="col-lg-4 col-md-1 col-12 flex-lg-fill ">
+            <div className="col-lg-4 col-md-4 col-sm-12 flex-lg-fill">
               <br />
 
               <h5>Account Number</h5>
@@ -172,7 +115,7 @@ const DashboardItem = ({ userDetails }) => {
               </h2>
             </div>
             <div className="col-lg-4 col-md-4 col-12  justify-content-center ">
-              <Button variant="secondary" onClick={handleBalanceClick}>
+              <Button variant="secondary" onClick={balAvailable}>
                 {showBalance ? "Hide Balance" : "Show Balance"}
               </Button>
               {showBalance && <h2>₹{balance}</h2>}
@@ -196,7 +139,6 @@ const DashboardItem = ({ userDetails }) => {
                   <DepositForm
                     userDetails={userDetails}
                     handleDepositSuccess={handleDepositSuccess}
-                    balanceAvailable={balanceAvailable}
                   />
                 )}
                 <Button
@@ -222,7 +164,7 @@ const DashboardItem = ({ userDetails }) => {
               // setOpenModal={setModalOpen}
               onConfirm={errorHandler}>
               <SendMoneyForm
-                setCashback={setCashback}
+                // setCashback={setCashback}
                 onConfirm={errorHandler}
                 handleDepositSuccess={handleDepositSuccess}
                 setOpenModal={setModalOpen}
@@ -232,7 +174,7 @@ const DashboardItem = ({ userDetails }) => {
             </Modal>
           )}
         </Container>
-        {cashback > 0 && (
+        {cashback !== null && cashback > 0 && (
           <div className="position-fixed bottom-0 end-0 m-3">
             <Card>
               <h4 className="mb-2">Total Cashback Earned</h4>
@@ -245,21 +187,6 @@ const DashboardItem = ({ userDetails }) => {
       </Card>
     </>
   );
-};
-// export async function getServerSideProps(context) {
-//   const accountNo = localStorage.getItem("accounts");
-//   console.log("Account Number " + accountNo);
-
-//   let data = await fetch(
-//     `http://localhost:8080/accounts/transaction/${accountNo}`,
-//     { headers }
-//   );
-//   console.log(data);
-//   let allTransactions = await data.json();
-//   console.log(allTransactions);
-//   return {
-//     props: { allTransactions }, // will be passed to the page component as props
-//   };
-// }
+}
 
 export default DashboardItem;

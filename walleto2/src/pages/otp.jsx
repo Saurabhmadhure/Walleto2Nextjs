@@ -1,12 +1,11 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
-// import UserContext from "../Pages/Dashboard/UserContext";
-import Base from "../src/components/Base.jsx";
-import Card from "../src/components/card/Card.jsx";
+import Base from "../components/modals/Base.jsx";
+import Card from "../components/card/Card.jsx";
 import { useRouter } from "next/router";
 
 const OTP = ({ handleOTPVerification }) => {
