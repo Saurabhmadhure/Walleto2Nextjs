@@ -7,22 +7,13 @@ import { Modal } from "react-bootstrap";
 import Card from "../card/Card";
 import axios from "axios";
 
-function LoginModal({
-  handleOTPVerification,
-  isOTPVerified,
-  handleUserInfo,
-  onHide,
-  ...props
-}) {
+function LoginModal({ handleUserInfo, onHide, ...props }) {
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
     password: "",
   });
   const [modalShow, setModalShow] = useState(false);
-  const [otpStatus, setOtpStatus] = useState(false);
-  const tempOtpVerifiedFlag =
-    typeof window !== "undefined" && localStorage.getItem("otpVerification");
 
   const handleChange = (event, field) => {
     setData({ ...data, [field]: event.target.value });
@@ -38,11 +29,8 @@ function LoginModal({
       toast.error("Password is Empty");
       return;
     }
-    // axios
-    //   // .post("http://localhost:8080/users/login", data)
-    //   .then((response) =>
+
     try {
-      //api route for Login
       const response = await axios.post("/api/login", data);
 
       const responseData = response.data;
@@ -53,15 +41,15 @@ function LoginModal({
       localStorage.setItem("accounts", responseData?.accNo);
       localStorage.setItem("email", responseData.email);
       localStorage.setItem("name", responseData.name);
-      // localStorage.setItem("userData", JSON.stringify(responseData));
       toast.success("Succesfully Logged in");
       localStorage.setItem("accounts", responseData?.accNo);
       setData({ email: "", password: "" });
       handleModalClose();
+      onHide;
       const tempOtpVerifiedFlag = localStorage.getItem("otpVerification");
-      if (isOTPVerified === "true" || Boolean(tempOtpVerifiedFlag)) {
+      if (tempOtpVerifiedFlag === "true") {
         router.push("/home");
-      } else {
+      } else if (tempOtpVerifiedFlag === "false" || "null") {
         router.push("/otp");
       }
     } catch (error) {
@@ -135,14 +123,6 @@ function LoginModal({
           pauseOnHover
           theme="dark"
         />
-        {/* {!isOTPVerified ||
-          (!tempOtpVerifiedFlag && (
-            <OTP
-              onHide={handleModalClose}
-              isOTPVerified={isOTPVerified}
-              handleOTPVerification={handleOTPVerification}
-            />
-          ))} */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Close</Button>

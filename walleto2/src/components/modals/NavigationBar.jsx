@@ -28,9 +28,9 @@ function NavigationBar({ handleUserInfo, userDetails }) {
     toast.success("Successfully Logged Out");
   };
 
-  const handleOTPVerification = (isVerified) => {
-    setIsOTPVerified(isVerified);
-  };
+  // const handleOTPVerification = (isVerified) => {
+  //   setIsOTPVerified(isVerified);
+  // };
 
   useEffect(() => {
     const savedName =
@@ -77,17 +77,17 @@ function NavigationBar({ handleUserInfo, userDetails }) {
             )}
           </div>
           <LoginModal
-            handleOTPVerification={handleOTPVerification}
+            // handleOTPVerification={handleOTPVerification}
             handleUserInfo={(user) => {
               setUname(user.name);
               handleUserInfo(user);
             }}
-            isOTPVerified={isOTPVerified}
+            // isOTPVerified={isOTPVerified}
             show={modalShow}
             onHide={() => setModalShow(false)}
           />
           <SignUpModel
-            handleOTPVerification={handleOTPVerification}
+            // handleOTPVerification={handleOTPVerification}
             handleUserInfo={(user) => {
               setUname(user.name);
               handleUserInfo(user);

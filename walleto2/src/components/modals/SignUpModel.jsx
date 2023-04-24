@@ -100,6 +100,7 @@ function SignUpModel({
           password: "",
         });
         toast.success("Otp has been Sent To your Registered Email");
+        localStorage.setItem("otpVerification", false);
 
         setShowOTPModal(true);
 
@@ -136,7 +137,7 @@ function SignUpModel({
       console.log();
       toast.success("Succesfully Registered");
       localStorage.setItem("otpVerification", true);
-      handleOTPVerification(true);
+      // handleOTPVerification(true);
       setOtp("");
 
       handleUserInfo(userInfo);
@@ -144,7 +145,7 @@ function SignUpModel({
       onHide();
     } else {
       localStorage.setItem("otpVerification", false);
-      handleOTPVerification(false);
+      // handleOTPVerification(false);
 
       console.log({
         userEnteredOTP: otp,

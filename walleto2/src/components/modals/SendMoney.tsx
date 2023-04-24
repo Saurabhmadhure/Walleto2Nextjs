@@ -6,7 +6,6 @@ import { Button, Form } from "react-bootstrap";
 
 type SendMoneyFormProps = {
   // onSubmit: (receiverId: string, amount: number) => Promise<void>;
-
   children: React.ReactNode;
   userDetails: { accNo: number; token: string };
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
