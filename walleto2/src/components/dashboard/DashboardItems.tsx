@@ -5,7 +5,7 @@ import Card from "../card/Card";
 import SendMoneyForm from "../modals/SendMoney";
 import Modal from "../modals/Modal";
 import axios from "axios";
-import DepositForm from "./DepositForm.jsx";
+import DepositForm from "./DepositForm";
 import { Props } from "../../pages/type/HomeProp";
 
 const { useEffect, useState } = React;

@@ -4,26 +4,26 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "react-bootstrap/Button";
 import { Form } from "react-bootstrap";
+import React from "react";
+import { DepositFormProps } from "../../pages/type/HomeProp";
 
-const DepositForm = ({ userDetails, handleDepositSuccess }) => {
+function DepositForm({ userDetails, handleDepositSuccess }: DepositFormProps) {
   const [data, setData] = useState({
-    uid: "",
+    uid: Number(null),
     amount: "",
   });
   // const [isSubmitting, setIsSubmitting] = useState(false);
   const [balance, setBalance] = useState(userDetails?.balance || 0);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     if (name === "amount") {
-      const regex = /^[0-9]*$/; // regex to allow only numbers
+      const regex = /^[0-9]*$/;
       if (regex.test(value)) {
         setData({ ...data, [name]: value });
       } else {
-        setData({ ...data, [name]: "" }); // set the value to an empty string if it's not a number
+        setData({ ...data, [name]: "" });
       }
-    } else {
-      setData({ ...data, [name]: value });
     }
   };
 
@@ -32,8 +32,7 @@ const DepositForm = ({ userDetails, handleDepositSuccess }) => {
     amount: data.amount,
   };
 
-  const handleSubmit = async (event) => {
-    // setIsSubmitting(true);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const jwtToken = userDetails.token;
@@ -43,7 +42,7 @@ const DepositForm = ({ userDetails, handleDepositSuccess }) => {
       "Content-Type": "application/json",
     };
 
-    if (data.amount > 0) {
+    if (data.amount > "0") {
       await axios
         .post("/api/deposit", requestData, { headers })
 
@@ -64,20 +63,13 @@ const DepositForm = ({ userDetails, handleDepositSuccess }) => {
           }
         });
     } else {
-      toast.error("Please Enter Amount", {
-        toastId: "empty-amount-error",
-        "data-testid": "empty-amount-error",
-      });
+      toast.error("Deposit Amount could Not Be Zero", {});
     }
-    // setIsSubmitting(false);
   };
-  const [isLoading, setLoading] = useState(false);
-
-  const handleClick = () => setLoading(true);
 
   return (
     <>
-      <Form bg="dark" variant="dark">
+      <Form onSubmit={handleSubmit} style={{ backgroundColor: "dark" }}>
         <Form.Group className="mb-1">
           <Form.Label htmlFor="amountInput"> </Form.Label>
           <Form.Control
@@ -89,21 +81,20 @@ const DepositForm = ({ userDetails, handleDepositSuccess }) => {
             data-testid="amount-input"
           />
         </Form.Group>
-        {data.amount === "" && (
+        {data.amount === "0" && (
           <div data-testid="empty-amount-error">Please enter amount</div>
         )}
         <br />
         <Button
           variant="primary"
-          disabled={isLoading}
-          onClick={!isLoading ? handleSubmit : null}
+          // onClick={handleClick}
           // onClick={handleSubmit}
-        >
-          {isLoading ? "Depositing..." : "Deposit"}
+          type="submit">
+          Deposit
         </Button>
       </Form>
     </>
   );
-};
+}
 
 export default DepositForm;
