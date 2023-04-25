@@ -46,21 +46,26 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
   }, []);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark rounded-2">
-      <div className="container-fluid  d-flex align-items-center">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          <li className="nav-item">
-            <Link href="/home" passHref legacyBehavior>
-              <a className="nav-link mt-1">
-                <strong>
-                  <h2>Walleto</h2>
-                </strong>
-              </a>
-            </Link>
-          </li>
-        </ul>
-        <Navbar.Collapse className="justify-content-end mb-2">
-          {/* <div className="justify-content-end mb-2"> */}
+    <Navbar expand="lg" className="navbar-dark bg-dark rounded-2">
+      <div className="container-fluid">
+        <Link href="/home" passHref legacyBehavior>
+          <Navbar.Brand>
+            <strong>
+              <h2>Walleto</h2>
+            </strong>
+          </Navbar.Brand>
+        </Link>
+        <Navbar.Toggle className="ml-auto" aria-controls="navbar-nav" />
+        <Navbar.Collapse id="navbar-nav" className="justify-content-end">
+          {/* <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link href="/home" passHref legacyBehavior>
+                <a className="nav-link mt-1">
+                  <strong>Home</strong>
+                </a>
+              </Link>
+            </li>
+          </ul> */}
           <div className="d-flex justify-content-center align-items-center">
             {uname ? (
               <DropdownButton id="dropdown-basic-button" title={uname}>
@@ -112,7 +117,7 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
           theme="dark"
         />
       </div>
-    </nav>
+    </Navbar>
   );
 }
 export default NavigationBar;
