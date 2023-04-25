@@ -55,7 +55,10 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
             </strong>
           </Navbar.Brand>
         </Link>
-        <Navbar.Toggle className="ml-auto" aria-controls="navbar-nav" />
+        <Navbar.Toggle
+          className="justify-content-end"
+          aria-controls="navbar-nav"
+        />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
           {/* <ul className="navbar-nav mr-auto">
             <li className="nav-item">
