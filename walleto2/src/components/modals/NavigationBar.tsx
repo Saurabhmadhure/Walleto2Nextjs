@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
-// import Navbar from "react-bootstrap/Navbar";
 import Navbar from "react-bootstrap/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,12 +12,10 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
   const [uname, setUname] = useState<String>("");
   const [modalShow, setModalShow] = useState(false);
   const [signModalShow, setSignModalShow] = useState(false);
-  const [isOTPVerified, setIsOTPVerified] = useState(false);
 
   useEffect(() => {
     var name = userDetails?.name ?? "";
     setUname(name);
-    var acNo = userDetails?.accNo;
   }, [userDetails]);
 
   const Logout = () => {
@@ -31,10 +28,6 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
 
     window.location.href = "/";
     toast.success("Successfully Logged Out");
-  };
-
-  const handleOTPVerification = (isVerified) => {
-    setIsOTPVerified(isVerified);
   };
 
   useEffect(() => {
@@ -55,20 +48,11 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
             </strong>
           </Navbar.Brand>
         </Link>
-        <Navbar.Toggle
-          className="justify-content-end"
-          aria-controls="navbar-nav"
-        />
-        <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-          {/* <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link href="/home" passHref legacyBehavior>
-                <a className="nav-link mt-1">
-                  <strong>Home</strong>
-                </a>
-              </Link>
-            </li>
-          </ul> */}
+        {/* <Navbar.Toggle className="d-flex justify-content-sm-end" /> */}
+
+        <Navbar.Collapse
+          id="navbar-nav"
+          className="d-flex justify-content-sm-end">
           <div className="d-flex justify-content-center align-items-center">
             {uname ? (
               <DropdownButton id="dropdown-basic-button" title={uname}>
@@ -89,6 +73,7 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
               </>
             )}
           </div>
+
           <LoginModal
             handleUserInfo={(user) => {
               setUname(user.name);
@@ -105,7 +90,6 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
             show={signModalShow}
             onHide={() => setSignModalShow(false)}
           />
-          {/* </div> */}
         </Navbar.Collapse>
         <ToastContainer
           position="bottom-left"

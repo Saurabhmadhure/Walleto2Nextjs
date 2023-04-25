@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import dashboardStyle from "../../styles/Dashboard.module.css";
 import Card from "../card/Card";
@@ -7,6 +7,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import React from "react";
 
 type Transaction = {
   id: number;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 function AllTransaction({ response }: Props) {
+  console.log(response);
   const [transactions, setTransactions] = useState<Transaction[]>(
     response ?? []
   );
@@ -79,8 +81,27 @@ function AllTransaction({ response }: Props) {
         filter: "agTextColumnFilter",
         filterParams: {
           filterOptions: ["equals", "lessThan", "greaterThan"],
+          textCustomComparator: function (
+            filter: any,
+            value: number,
+            filterText: number
+          ) {
+            switch (filter) {
+              case "equals":
+                return value == filterText;
+              case "lessThan":
+                return value < filterText;
+              case "greaterThan":
+                return value > filterText;
+              default:
+                return false;
+            }
+          },
         },
+
         floatingFilter: true,
+        suppressMenu: true,
+
         cellStyle: (params: any) => {
           if (params.data.transaction < 0) {
             return { color: "red" };
@@ -97,6 +118,8 @@ function AllTransaction({ response }: Props) {
         filterParams: {
           filterOptions: ["contains"],
         },
+        suppressMenu: true,
+
         floatingFilter: true,
       },
       {
@@ -105,10 +128,12 @@ function AllTransaction({ response }: Props) {
       },
       {
         field: "cashback",
-        filter: "agNumberColumnFilter",
+        filter: "agTextColumnFilter",
         filterParams: {
           filterOptions: ["contains"],
         },
+        suppressMenu: true,
+
         floatingFilter: true,
       },
     ],
@@ -143,26 +168,19 @@ function AllTransaction({ response }: Props) {
       enableRowGroup: true,
       flex: 1,
       minWidth: 100,
-      // filter: true,
-      // floatingFilter: true,
     }),
     []
   );
-  // const handlePaginationChange = (event) => {
-  //   const newPageSize = parseInt(event.target.value, 10);
-  //   setTransactionsPerPage(newPageSize);
-  //   setCurrentPage(1);
-  // };
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: React.SetStateAction<number>) => {
     setCurrentPage(newPage);
   };
-  const handleDownload = (format) => {
+  const handleDownload = () => {
     const params = {
       skipHeader: false,
       skipFooters: true,
       skipGroups: true,
-      fileName: `transactions.${format}`,
+      fileName: "transactions.csv",
     };
     gridRef.current.exportDataAsCsv(params);
   };
@@ -222,7 +240,7 @@ function AllTransaction({ response }: Props) {
                 Next &gt;
               </Button>
             </div>
-            <Button onClick={() => handleDownload("csv")}>Download File</Button>
+            <Button onClick={() => handleDownload()}>Download File</Button>
           </div>
         </div>
       </>

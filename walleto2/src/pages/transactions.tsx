@@ -4,7 +4,7 @@ import Transaction from "../components/Transaction/AllTransaction";
 import { useRouter } from "next/router";
 import Base from "../components/modals/Base";
 
-const TransactionTable = () => {
+function TransactionTable() {
   const [userInfo, setUserInfo] = useState<{ [key: string]: any } | null>(null);
   const router = useRouter();
   const { query } = router;
@@ -27,6 +27,6 @@ const TransactionTable = () => {
       <Transaction response={response} />
     </>
   );
-};
+}
 
 export default TransactionTable;

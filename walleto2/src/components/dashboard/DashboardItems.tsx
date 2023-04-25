@@ -21,6 +21,7 @@ function DashboardItem({ userDetails }: Props) {
   const [balance, setBalance] = useState<number | null>(null);
 
   const [cashback, setCashback] = useState<number | null>(null);
+  const [transactions, setTransactions] = useState([]);
 
   const errorHandler = () => {
     setModalOpen(false);
@@ -57,23 +58,13 @@ function DashboardItem({ userDetails }: Props) {
 
   const router = useRouter();
 
-  const navigateToTransactions = async () => {
-    try {
-      const response = await fetchTransactionData();
-      router.push({
-        pathname: "/transactions",
-        query: { response: JSON.stringify(response) },
-      });
-    } catch (error) {
-      console.error("Error navigating to transactions:", error);
-    }
-  };
-
   const fetchTransactionData = async () => {
     try {
       const apiResponse = await axios.get(
         `/api/alltransactions?acNo=${acNo}&jwtToken=${jwtToken}`
       );
+      console.log(apiResponse);
+      setTransactions(apiResponse.data);
     } catch (error) {
       console.error("Error fetching transaction data:", error);
     }
@@ -81,6 +72,12 @@ function DashboardItem({ userDetails }: Props) {
   useEffect(() => {
     fetchTransactionData();
   }, []);
+  const navigateToTransactions = () => {
+    router.push({
+      pathname: "/transactions",
+      query: { transactions: JSON.stringify(transactions) },
+    });
+  };
 
   const balAvailable = async () => {
     setShowBalance((showBalance) => !showBalance);

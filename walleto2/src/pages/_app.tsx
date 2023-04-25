@@ -1,13 +1,8 @@
-// import { SSRProvider } from "react-bootstrap";
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function MyApp({ Component, pageProps }) {
-  return (
-    // <SSRProvider>
-    <Component {...pageProps} />
-    // </SSRProvider>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;
