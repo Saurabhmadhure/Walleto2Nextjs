@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import classes from "./ErrorModal.module.css";
+import classes from "../../styles/ErrorModal.module.css";
 import Card from "../card/Card";
 export default function ErrorModal(props) {
   return (

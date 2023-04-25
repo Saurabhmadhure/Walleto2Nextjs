@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
 import Base from "../components/modals/Base";
-import Card from "../components/card/Card.jsx";
+import Card from "../components/card/Card";
 import { useRouter } from "next/router";
 
 interface OTPProps {

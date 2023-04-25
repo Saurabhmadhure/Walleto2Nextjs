@@ -69,6 +69,13 @@ function SignUpModel({
         });
         return;
       }
+      if (user.email.trim().length === 0) {
+        setErr({
+          titleofError: "Invalid input",
+          message: "Please enter Email.",
+        });
+        return;
+      }
       if (user.password.trim().length < 6) {
         setErr({
           titleofError: "Invalid Password",

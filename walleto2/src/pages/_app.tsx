@@ -1,4 +1,5 @@
 // import { SSRProvider } from "react-bootstrap";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function MyApp({ Component, pageProps }) {
