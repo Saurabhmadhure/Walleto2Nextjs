@@ -1,64 +1,60 @@
+import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
-import Base from "../components/modals/Base.jsx";
+import Base from "../components/modals/Base";
 import Card from "../components/card/Card.jsx";
 import { useRouter } from "next/router";
 
-const OTP = ({ handleOTPVerification }) => {
+interface OTPProps {
+  handleOTPVerification: (value: boolean) => void;
+}
+
+const OTP = ({ handleOTPVerification }: OTPProps) => {
   const [otp, setOtp] = useState("");
   const [showOtpForm, setShowOtpForm] = useState(false);
-  //   const { setUserInfo } = useContext(UserContext);
   const router = useRouter();
 
-  const handleUserInfo = (data) => {
-    setUserInfo(data);
+  const handleUserInfo = (data: any) => {
+    // setUserInfo(data);
   };
 
   const handleActivateAccount = () => {
     setShowOtpForm(true);
   };
-  const handleOtpSubmit = async (event) => {
+
+  const handleOtpSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(handleOTPVerification);
     var email = localStorage.getItem("email");
 
     const otpData = {
       email: email,
       userEnteredOTP: otp,
     };
-    console.log(otp);
-    await axios
-      .post("/api/otp", otpData)
-
-      .then((otpResponse) => {
-        console.log(otpResponse);
-        if (otpResponse.data === true) {
-          console.log();
-          localStorage.setItem("otpVerification", true);
-          // handleOTPVerification(true);
-
-          toast.success("Succesfully Registered");
-          router.push("/home");
-          setOtp("");
-        } else {
-          console.log({
-            userEnteredOTP: otp,
-            email: email,
-          });
-          setOtp("");
-
-          toast.error("Invalid Otp. Please try again");
-        }
-      });
+    await axios.post("/api/otp", otpData).then((otpResponse) => {
+      if (otpResponse.data === true) {
+        localStorage.setItem("otpVerification", "true");
+        toast.success("Succesfully Registered");
+        router.push("/home");
+        setOtp("");
+      } else {
+        setOtp("");
+        toast.error("Invalid Otp. Please try again");
+      }
+    });
   };
 
   return (
     <>
-      <Base />
+      <Base
+        handleUserInfo={function (user: any): void {
+          throw new Error("Function not implemented.");
+        }}
+        userDetails={null}
+      />
       <div>
         {!showOtpForm && (
           <div
@@ -78,8 +74,7 @@ const OTP = ({ handleOTPVerification }) => {
             {showOtpForm && (
               <Card>
                 <Form
-                  bg="dark"
-                  variant="dark"
+                  style={{ backgroundColor: "dark" }}
                   onSubmit={handleOtpSubmit}></Form>
               </Card>
             )}
@@ -93,9 +88,11 @@ const OTP = ({ handleOTPVerification }) => {
                   <div className="col-md-1"></div>
                   <Container>
                     <Card>
-                      <h1 align="center">Activate Your Account</h1>
+                      <h1 className="text-center">Activate Your Account</h1>
                       <br />
-                      <Form bg="dark" variant="dark" onSubmit={handleOtpSubmit}>
+                      <Form
+                        style={{ backgroundColor: "dark" }}
+                        onSubmit={handleOtpSubmit}>
                         <Form.Group className="mb-1">
                           <Form.Label>
                             Insert OTP received on registered mail
@@ -116,7 +113,7 @@ const OTP = ({ handleOTPVerification }) => {
                             Activate Account
                           </Form.Text>
                         </Form.Group>
-
+                        Activate Account
                         <Button variant="primary" type="submit">
                           Submit
                         </Button>
@@ -124,8 +121,8 @@ const OTP = ({ handleOTPVerification }) => {
                     </Card>
                   </Container>
                 </div>
-              </div>{" "}
-            </div>{" "}
+              </div>
+            </div>
           </div>
         )}
       </div>

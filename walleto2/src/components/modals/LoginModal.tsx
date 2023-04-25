@@ -16,7 +16,6 @@ function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
     email: "",
     password: "",
   });
-  const [modalShow, setModalShow] = useState<Boolean>(false);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -37,7 +36,6 @@ function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
       const response = await axios.post("/api/login", data);
 
       const responseData = response.data;
-      // LoginModalProps.handleUserInfo(responseData);
       handleUserInfo(responseData);
       localStorage.setItem("tokens", responseData?.token);
       localStorage.setItem("userName", responseData.name);
@@ -48,7 +46,7 @@ function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
       toast.success("Successfully Logged in");
       localStorage.setItem("accounts", responseData?.accNo);
       setData({ email: "", password: "" });
-      handleModalClose();
+      // handleModalClose();
       onHide();
       const tempOtpVerifiedFlag = localStorage.getItem("otpVerification");
       if (tempOtpVerifiedFlag === "true") {
@@ -65,10 +63,6 @@ function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
         setData({ email: "", password: "" });
       }
     }
-  };
-
-  const handleModalClose = () => {
-    setModalShow(false);
   };
 
   return (

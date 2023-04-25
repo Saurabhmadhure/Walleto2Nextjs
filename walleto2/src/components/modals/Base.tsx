@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { NavBarProps } from "../../pages/type/NavbarProp";
 import NavigationBar from "./NavigationBar";
 
-function Base({ handleUserInfo, userDetails }) {
+function Base({ handleUserInfo, userDetails }: NavBarProps) {
   return (
     <>
       <NavigationBar

@@ -5,17 +5,18 @@ import Navbar from "react-bootstrap/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import SignUpModel from "./SignUpModel";
+import { NavBarProps } from "../../pages/type/NavbarProp";
 import LoginModal from "./LoginModal";
+import SignUpModel from "./SignUpModel";
 
-function NavigationBar({ handleUserInfo, userDetails }) {
-  const [uname, setUname] = useState("");
+function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
+  const [uname, setUname] = useState<String>("");
   const [modalShow, setModalShow] = useState(false);
   const [signModalShow, setSignModalShow] = useState(false);
   const [isOTPVerified, setIsOTPVerified] = useState(false);
 
   useEffect(() => {
-    var name = userDetails?.name;
+    var name = userDetails?.name ?? "";
     setUname(name);
     var acNo = userDetails?.accNo;
   }, [userDetails]);
@@ -23,14 +24,18 @@ function NavigationBar({ handleUserInfo, userDetails }) {
   const Logout = () => {
     const otpVerification = localStorage.getItem("otpVerification");
     localStorage.clear();
-    localStorage.setItem("otpVerification", otpVerification);
+    if (otpVerification === null) {
+      localStorage.setItem("otpVerification", "null");
+    } else if (otpVerification !== null)
+      localStorage.setItem("otpVerification", otpVerification);
+
     window.location.href = "/";
     toast.success("Successfully Logged Out");
   };
 
-  // const handleOTPVerification = (isVerified) => {
-  //   setIsOTPVerified(isVerified);
-  // };
+  const handleOTPVerification = (isVerified) => {
+    setIsOTPVerified(isVerified);
+  };
 
   useEffect(() => {
     const savedName =
@@ -77,17 +82,14 @@ function NavigationBar({ handleUserInfo, userDetails }) {
             )}
           </div>
           <LoginModal
-            // handleOTPVerification={handleOTPVerification}
             handleUserInfo={(user) => {
               setUname(user.name);
               handleUserInfo(user);
             }}
-            // isOTPVerified={isOTPVerified}
             show={modalShow}
             onHide={() => setModalShow(false)}
           />
           <SignUpModel
-            // handleOTPVerification={handleOTPVerification}
             handleUserInfo={(user) => {
               setUname(user.name);
               handleUserInfo(user);

@@ -1,22 +1,22 @@
+import React from "react";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import ErrorModal from "../errormodal/ErrorModal";
+import { SignUpModelProps } from "../../pages/type/NavbarProp";
 
 function SignUpModel({
   handleUserInfo,
-  handleOTPVerification,
+
   onHide,
   ...props
-}) {
+}: SignUpModelProps) {
   const [otp, setOtp] = useState("");
   const [showOTPModal, setShowOTPModal] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   const [email, setEmail] = useState("");
   const [user, setUser] = useState({
@@ -25,21 +25,20 @@ function SignUpModel({
     password: "",
   });
 
-  console.log();
-  const [error, setError] = useState();
+  const [err, setErr] = useState<{
+    titleofError: string;
+    message: string;
+  } | null>(null);
   const [touched, setTouched] = useState({
     name: false,
     email: false,
     password: false,
   });
-  // const isNameValid = (name) => {
-  //   const regex = /^[a-zA-Z\s]+$/;
-  //   return regex.test(name);
-  // };
-  // const showNameError =
-  //   touched.name && (!user.name.trim() || !isNameValid(user.name));
 
-  const handleChange = (event, property) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    property: string
+  ) => {
     if (property === "name") {
       const regex = /^[a-zA-Z\s]*$/;
       if (regex.test(event.target.value)) {
@@ -59,93 +58,74 @@ function SignUpModel({
       password: "",
     });
   };
-  // const value = event.target.value;
-  //     const regex = /^[A-Za-z]+$/;
-  //     if (regex.test(value)) {
-  const submitData = async (event) => {
+
+  const submitData = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       if (user.name.trim().length === 0) {
-        setError({
+        setErr({
           titleofError: "Invalid input",
           message: "Please enter Name.",
         });
         return;
       }
-      if (user.password.trim().length < 1) {
-        setError({
+      if (user.password.trim().length < 6) {
+        setErr({
           titleofError: "Invalid Password",
           message: "Password Should be more than 6 digit.",
         });
         return;
       }
 
-      axios;
       const response = await axios.post("/api/register", user);
-
       const responseData = response.data;
+
       if (responseData && responseData.balance === 0) {
-        // doLogin(responseData, () => {});
-        // console.log(responseData);
         localStorage.setItem("tokens", responseData.token);
         localStorage.setItem("accounts", responseData?.accNo);
         localStorage.setItem("email", responseData.email);
         localStorage.setItem("name", responseData.name);
+
         setUserInfo(responseData);
         setEmail(responseData.email);
-
         setUser({
           name: "",
           email: "",
           password: "",
         });
+
         toast.success("Otp has been Sent To your Registered Email");
-        localStorage.setItem("otpVerification", false);
-
+        localStorage.setItem("otpVerification", "false");
         setShowOTPModal(true);
-
-        console.log(email);
       } else {
-        if (error && error.status === 400) {
-          toast.error("Something went wrong, please try again later");
-        } else {
-          toast.error(
-            "This Email Id is Already Present Please Try Another One"
-          );
-        }
+        toast.error("This Email Id is Already Present Please Try Another One");
       }
     } catch (error) {
       console.log(error);
     }
-
-    // navigate("/home/otp");
   };
 
-  const handleOtpSubmit = async (event) => {
+  const handleOtpSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    var email = localStorage.getItem("email");
+    const email = localStorage.getItem("email");
 
     const otpData = {
       email: email,
       userEnteredOTP: otp,
     };
-    //OTP api Route
     const otpResponse = await axios.post("/api/otp", otpData);
 
-    // console.log(otpResponse);
     if (otpResponse.data === true) {
       console.log();
       toast.success("Succesfully Registered");
-      localStorage.setItem("otpVerification", true);
-      // handleOTPVerification(true);
+      localStorage.setItem("otpVerification", "true");
       setOtp("");
 
       handleUserInfo(userInfo);
       setShowOTPModal(false);
       onHide();
     } else {
-      localStorage.setItem("otpVerification", false);
-      // handleOTPVerification(false);
+      localStorage.setItem("otpVerification", "false");
 
       console.log({
         userEnteredOTP: otp,
@@ -157,10 +137,7 @@ function SignUpModel({
     }
   };
   const errorHandler = () => {
-    setError(null);
-  };
-  const handleModalClose = () => {
-    props.setSignModalShow(false);
+    setErr(null);
   };
 
   return (
@@ -169,11 +146,11 @@ function SignUpModel({
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered>
-      {error && (
+      {err && (
         <ErrorModal
-          title={error.titleofError}
+          title={err.titleofError}
           placeholder="enter a title"
-          message={error.message}
+          message={err.message}
           onConfirm={errorHandler}
         />
       )}
@@ -183,29 +160,20 @@ function SignUpModel({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h1 align="center">Register Here</h1>
-        <Form bg="dark" variant="dark" onSubmit={submitData}>
+        <h1 className="text-center">Register Here</h1>
+        <Form style={{ backgroundColor: "dark" }} onSubmit={submitData}>
           <Form.Group className="mb-1">
             <Form.Label>Name</Form.Label>
             <Form.Control
               id="name"
               type="text"
-              class="form-control"
-              // onBlur={(event) => handleBlur(event, "name")}
+              className="form-control"
               placeholder="Enter Name"
-              onChange={(e) => handleChange(e, "name")}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleChange(e, "name")
+              }
               value={user.name}
             />
-            {/* {!showNameError && (
-              <Form.Text className="text-muted">
-                Please enter your name
-              </Form.Text>
-            )}
-            {showNameError && (
-              <Form.Text className="text-danger">
-                Please enter a valid name (only alphabets are allowed)
-              </Form.Text>
-            )} */}
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Email address</Form.Label>
@@ -213,7 +181,9 @@ function SignUpModel({
               id="email"
               type="email"
               placeholder="Enter email"
-              onChange={(e) => handleChange(e, "email")}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleChange(e, "email")
+              }
               value={user.email}
             />
           </Form.Group>
@@ -223,7 +193,9 @@ function SignUpModel({
               id="password"
               type="password"
               placeholder="Password"
-              onChange={(e) => handleChange(e, "password")}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleChange(e, "password")
+              }
               value={user.password}
             />
           </Form.Group>

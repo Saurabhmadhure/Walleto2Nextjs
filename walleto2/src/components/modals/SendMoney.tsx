@@ -3,15 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Form } from "react-bootstrap";
+import { SendMoneyFormProps } from "../../pages/type/UserDetails";
 
-type SendMoneyFormProps = {
-  // onSubmit: (receiverId: string, amount: number) => Promise<void>;
-  children: React.ReactNode;
-  userDetails: { accNo: number; token: string };
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  onConfirm: () => void;
-  handleDepositSuccess: (data: number | null) => void;
-};
 function SendMoneyForm({
   // children,
   userDetails,
@@ -60,17 +53,6 @@ function SendMoneyForm({
   const availableBalance = localStorage.getItem("balance") || "0";
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // const { name, value } = event.target;
-    // if (name === "amount") {
-    //   const regex = /^[0-9]*$/; // regex to allow only numbers
-    //   if (regex.test(value)) {
-    //     setAmount({ ...amount, [name]: value });
-    //   } else {
-    //     setAmount({ ...amount, [name]: "" }); // set the value to an empty string if it's not a number
-    //   }
-    // } else {
-    //   setAmount({ ...amount, [name]: value });
-    // }
     setAmount(parseInt(event.target.value));
   };
   const handleAmountBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -120,11 +102,6 @@ function SendMoneyForm({
             onChange={handleAmountChange}
             onBlur={handleAmountBlur}
           />
-          {/* {warning && (
-            <Form.Text className="text-danger">
-              Entered amount is greater than available balance.
-            </Form.Text>
-          )} */}
         </Form.Group>
         <Button variant="primary" type="submit">
           Send

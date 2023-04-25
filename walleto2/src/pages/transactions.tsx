@@ -1,13 +1,14 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import Transaction from "../components/Transaction/AllTransaction";
 import { useRouter } from "next/router";
 import Base from "../components/modals/Base";
 
 const TransactionTable = () => {
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<{ [key: string]: any } | null>(null);
   const router = useRouter();
   const { query } = router;
-  const response = query.response ? JSON.parse(query.response) : null;
+  const response = query.response ? JSON.parse(query.response as string) : null;
 
   useEffect(() => {
     const userInfoFromStorage = localStorage.getItem("userInfo");
@@ -16,7 +17,7 @@ const TransactionTable = () => {
     }
   }, [setUserInfo]);
 
-  const handleUserInfo = (data) => {
+  const handleUserInfo = (data: { [key: string]: any }) => {
     setUserInfo(data);
   };
 

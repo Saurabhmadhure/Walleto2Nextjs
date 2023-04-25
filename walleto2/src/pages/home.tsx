@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import Base from "../components/modals/Base.jsx";
 import UserDashboard from "./dashboard";
 import { HomeProps, UserDetails, UserInfo } from "./type/HomeProp.js";
+import Base from "../components/modals/Base";
 
 function Home({ userData }: HomeProps): JSX.Element {
   const [userInfo, setUserInfo] = useState<UserDetails | null>(null);
@@ -23,7 +23,7 @@ function Home({ userData }: HomeProps): JSX.Element {
   const handleUserInfo = (data: UserInfo) => {
     const userDetails: UserDetails = {
       name: data.name,
-      accNo: data.accNo,
+      accNo: data.accNo, // Update the type to accept string or number
       balance: data.balance,
       token: data.token,
     };
