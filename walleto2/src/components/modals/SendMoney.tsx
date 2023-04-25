@@ -6,7 +6,6 @@ import { Button, Form } from "react-bootstrap";
 import { SendMoneyFormProps } from "../../pages/type/UserDetails";
 
 function SendMoneyForm({
-  // children,
   userDetails,
   setOpenModal,
   onConfirm,

@@ -96,6 +96,7 @@ function DashboardItem({ userDetails }: Props) {
     if (userDetails) {
       balAvailable();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userDetails]);
 
   return (
@@ -158,10 +159,8 @@ function DashboardItem({ userDetails }: Props) {
               show={modalOpen}
               onHide={() => setModalOpen(false)}
               title="Send Money"
-              // setOpenModal={setModalOpen}
               onConfirm={errorHandler}>
               <SendMoneyForm
-                // setCashback={setCashback}
                 onConfirm={errorHandler}
                 handleDepositSuccess={handleDepositSuccess}
                 setOpenModal={setModalOpen}

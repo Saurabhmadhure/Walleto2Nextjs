@@ -46,7 +46,6 @@ function LoginModal({ handleUserInfo, onHide, ...props }: LoginModalProps) {
       toast.success("Successfully Logged in");
       localStorage.setItem("accounts", responseData?.accNo);
       setData({ email: "", password: "" });
-      // handleModalClose();
       onHide();
       const tempOtpVerifiedFlag = localStorage.getItem("otpVerification");
       if (tempOtpVerifiedFlag === "true") {

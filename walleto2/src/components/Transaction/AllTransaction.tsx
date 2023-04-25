@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import dashboardStyle from "../../styles/Dashboard.module.css";
 import Card from "../card/Card";
@@ -7,7 +7,6 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
 import { Button } from "react-bootstrap";
-import React from "react";
 
 type Transaction = {
   id: number;
@@ -200,11 +199,8 @@ function AllTransaction({ response }: Props) {
               rowData={rowData}
               rowGroupPanelShow="always"
               animateRows={true}
-              // enableRangeSelection={true}
-              // enableCharts={true}
               rowSelection="multiple"
               onGridReady={(params) => {
-                // gridApi.current = params.api;
                 gridRef.current = params.api;
               }}
               columnDefs={columnDefs}

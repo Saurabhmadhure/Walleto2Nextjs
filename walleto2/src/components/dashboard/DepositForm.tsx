@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,7 +12,6 @@ function DepositForm({ userDetails, handleDepositSuccess }: DepositFormProps) {
     uid: Number(null),
     amount: "",
   });
-  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [balance, setBalance] = useState<number | null>(
     userDetails?.balance || 0
   );
@@ -87,11 +86,7 @@ function DepositForm({ userDetails, handleDepositSuccess }: DepositFormProps) {
           <div data-testid="empty-amount-error">Please enter amount</div>
         )}
         <br />
-        <Button
-          variant="primary"
-          // onClick={handleClick}
-          // onClick={handleSubmit}
-          type="submit">
+        <Button variant="primary" type="submit">
           Deposit
         </Button>
       </Form>

@@ -9,18 +9,10 @@ import Base from "../components/modals/Base";
 import Card from "../components/card/Card";
 import { useRouter } from "next/router";
 
-interface OTPProps {
-  handleOTPVerification: (value: boolean) => void;
-}
-
-const OTP = ({ handleOTPVerification }: OTPProps) => {
+const OTP = () => {
   const [otp, setOtp] = useState("");
   const [showOtpForm, setShowOtpForm] = useState(false);
   const router = useRouter();
-
-  const handleUserInfo = (data: any) => {
-    // setUserInfo(data);
-  };
 
   const handleActivateAccount = () => {
     setShowOtpForm(true);

@@ -15,10 +15,10 @@ function SignUpModel({
   ...props
 }: SignUpModelProps) {
   const [otp, setOtp] = useState("");
-  const [showOTPModal, setShowOTPModal] = useState(false);
+  const [showOTPModal, setShowOTPModal] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>(null);
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<string>("");
   const [user, setUser] = useState({
     name: "",
     email: "",

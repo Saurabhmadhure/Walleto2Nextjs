@@ -23,7 +23,7 @@ function Home({ userData }: HomeProps): JSX.Element {
   const handleUserInfo = (data: UserInfo) => {
     const userDetails: UserDetails = {
       name: data.name,
-      accNo: data.accNo, // Update the type to accept string or number
+      accNo: data.accNo,
       balance: data.balance,
       token: data.token,
     };

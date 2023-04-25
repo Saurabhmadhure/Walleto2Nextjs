@@ -48,7 +48,6 @@ function NavigationBar({ handleUserInfo, userDetails }: NavBarProps) {
             </strong>
           </Navbar.Brand>
         </Link>
-        {/* <Navbar.Toggle className="d-flex justify-content-sm-end" /> */}
 
         <Navbar.Collapse
           id="navbar-nav"
