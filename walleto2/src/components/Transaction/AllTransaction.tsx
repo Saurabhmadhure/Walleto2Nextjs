@@ -7,23 +7,12 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import {
+  Transaction,
+  TransactionProps,
+} from "../../pages/type/TransactionProps";
 
-type Transaction = {
-  id: number;
-  date: string;
-  sendAmount: number;
-  receiveAmount: number;
-  deposited: number;
-  message: string;
-  status: string;
-  cashback: number;
-};
-
-type Props = {
-  response: Transaction[];
-};
-
-function AllTransaction({ response }: Props) {
+function AllTransaction({ response }: TransactionProps) {
   console.log(response);
   const [transactions, setTransactions] = useState<Transaction[]>(
     response ?? []
@@ -77,31 +66,15 @@ function AllTransaction({ response }: Props) {
 
       {
         field: "transaction",
-        filter: "agTextColumnFilter",
-        filterParams: {
-          filterOptions: ["equals", "lessThan", "greaterThan"],
-          textCustomComparator: function (
-            filter: any,
-            value: number,
-            filterText: number
-          ) {
-            switch (filter) {
-              case "equals":
-                return value == filterText;
-              case "lessThan":
-                return value < filterText;
-              case "greaterThan":
-                return value > filterText;
-              default:
-                return false;
-            }
-          },
-        },
-
+        filter: "agNumberColumnFilter",
         floatingFilter: true,
         suppressMenu: true,
+        filterParams: {
+          filterOptions: ["equals", "lessThan", "greaterThan"],
+        },
 
         cellStyle: (params: any) => {
+          console.log(params);
           if (params.data.transaction < 0) {
             return { color: "red" };
           } else if (params.data.transaction > 0) {
